@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro & Action Tracker</title>
+    <meta
+      name="description"
+      content="Retronu başlat, fikirleri topla, aksiyonları unutma."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Soft pastel palette */
+        --bg: #f7f7fb;
+        --surface: #ffffff;
+        --surface-2: #fbfaff;
+        --border: #ecebf3;
+        --border-strong: #e0dfeb;
+
+        --text: #1a1a2e;
+        --text-soft: #5a5a72;
+        --text-muted: #8a8aa3;
+
+        --primary: #6366f1;          /* indigo */
+        --primary-soft: #eef0ff;
+        --primary-strong: #4f46e5;
+
+        --mint: #10b981;
+        --mint-soft: #e6f7f0;
+        --pink: #ec4899;
+        --pink-soft: #fdeef6;
+        --amber: #f59e0b;
+        --amber-soft: #fef4e2;
+        --sky: #0ea5e9;
+        --sky-soft: #e6f4fb;
+
+        --shadow-sm: 0 1px 2px rgba(17, 17, 39, 0.04),
+                     0 1px 1px rgba(17, 17, 39, 0.03);
+        --shadow-md: 0 4px 12px rgba(17, 17, 39, 0.05),
+                     0 2px 4px rgba(17, 17, 39, 0.04);
+        --shadow-lg: 0 12px 32px rgba(17, 17, 39, 0.08),
+                     0 4px 12px rgba(17, 17, 39, 0.04);
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 20px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        font-size: 14px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Decorative soft gradient blob backdrop */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          radial-gradient(ellipse 600px 400px at 12% 0%, rgba(99,102,241,0.10), transparent 60%),
+          radial-gradient(ellipse 500px 350px at 95% 8%, rgba(236,72,153,0.07), transparent 60%);
+        pointer-events: none;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      button { font: inherit; cursor: pointer; }
+
+      /* ---------- App shell ---------- */
+      .app {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 10px 18px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+      }
+      .brand-mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        background: linear-gradient(135deg, var(--primary), var(--pink));
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-weight: 800;
+        font-size: 14px;
+        box-shadow: 0 4px 10px rgba(99,102,241,0.30);
+      }
+      .brand-name {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: -0.01em;
+      }
+      .brand-sub {
+        font-size: 11px;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .nav-section {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+        padding: 14px 12px 6px;
+        font-weight: 600;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: var(--radius-sm);
+        color: var(--text-soft);
+        font-weight: 500;
+        font-size: 13.5px;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+      .nav-item:hover {
+        background: var(--surface-2);
+        color: var(--text);
+      }
+      .nav-item.active {
+        background: var(--primary-soft);
+        color: var(--primary-strong);
+        font-weight: 600;
+      }
+      .nav-item .ico {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+      .nav-item .badge-count {
+        margin-left: auto;
+        font-size: 11px;
+        padding: 2px 7px;
+        border-radius: 999px;
+        background: var(--primary-soft);
+        color: var(--primary-strong);
+        font-weight: 600;
+      }
+      .nav-item.active .badge-count {
+        background: #fff;
+      }
+
+      .sidebar-foot {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+      }
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #a5b4fc, #f9a8d4);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+      .sidebar-foot .who { line-height: 1.25; }
+      .sidebar-foot .name { font-weight: 600; font-size: 13px; }
+      .sidebar-foot .role { font-size: 11.5px; color: var(--text-muted); }
+
+      /* Main */
+      .main { display: flex; flex-direction: column; min-width: 0; }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 32px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .search {
+        flex: 1;
+        max-width: 460px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 8px 12px;
+        color: var(--text-muted);
+        transition: border 0.15s, background 0.15s;
+      }
+      .search:focus-within {
+        border-color: var(--primary);
+        background: #fff;
+      }
+      .search input {
+        border: 0;
+        outline: 0;
+        background: transparent;
+        flex: 1;
+        font: inherit;
+        color: var(--text);
+        font-size: 13.5px;
+      }
+      .search kbd {
+        font-family: "Inter", sans-serif;
+        font-size: 10.5px;
+        background: #fff;
+        border: 1px solid var(--border);
+        padding: 2px 6px;
+        border-radius: 5px;
+        color: var(--text-muted);
+      }
+
+      .icon-btn {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: 10px;
+        color: var(--text-soft);
+        transition: background 0.15s, color 0.15s;
+        position: relative;
+      }
+      .icon-btn:hover {
+        background: var(--surface-2);
+        color: var(--text);
+      }
+      .icon-btn .ping {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--pink);
+        border: 2px solid var(--surface);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 13.5px;
+        border: 1px solid transparent;
+        transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 6px 14px rgba(99,102,241,0.30);
+      }
+      .btn-primary:hover { background: var(--primary-strong); }
+      .btn-primary:active { transform: translateY(1px); }
+      .btn-ghost {
+        background: var(--surface);
+        color: var(--text);
+        border-color: var(--border-strong);
+      }
+      .btn-ghost:hover { background: var(--surface-2); }
+      .btn-soft {
+        background: var(--primary-soft);
+        color: var(--primary-strong);
+      }
+      .btn-soft:hover { background: #e3e6ff; }
+
+      /* Content */
+      .content {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        max-width: 1280px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .page-head h1 {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        margin: 0 0 4px;
+      }
+      .page-head p {
+        margin: 0;
+        color: var(--text-soft);
+        font-size: 14px;
+      }
+      .page-head-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+      /* Action cards (primary CTAs) */
+      .cta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .cta {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 22px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        transition: transform 0.12s ease, box-shadow 0.18s ease, border-color 0.15s;
+        overflow: hidden;
+      }
+      .cta::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(135deg, rgba(99,102,241,0.06), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .cta:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--border-strong);
+      }
+      .cta:hover::after { opacity: 1; }
+
+      .cta-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+      .cta-icon.indigo { background: var(--primary-soft); color: var(--primary-strong); }
+      .cta-icon.mint   { background: var(--mint-soft);    color: var(--mint); }
+
+      .cta-body { flex: 1; min-width: 0; }
+      .cta-body h3 {
+        margin: 0 0 2px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .cta-body p { margin: 0; font-size: 13px; color: var(--text-soft); }
+
+      .cta-arrow {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        color: var(--text-muted);
+        background: var(--surface-2);
+        transition: background 0.15s, color 0.15s, transform 0.15s;
+      }
+      .cta:hover .cta-arrow {
+        background: var(--primary);
+        color: #fff;
+        transform: translateX(2px);
+      }
+
+      /* KPI cards */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .stat-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12.5px;
+        color: var(--text-soft);
+        font-weight: 500;
+      }
+      .stat-ico {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+      }
+      .stat-ico.indigo { background: var(--primary-soft); color: var(--primary-strong); }
+      .stat-ico.mint   { background: var(--mint-soft);    color: var(--mint); }
+      .stat-ico.amber  { background: var(--amber-soft);   color: var(--amber); }
+      .stat-ico.sky    { background: var(--sky-soft);     color: var(--sky); }
+
+      .stat-value {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1;
+      }
+      .stat-delta {
+        font-size: 12px;
+        color: var(--mint);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 600;
+      }
+      .stat-delta.neg { color: var(--pink); }
+      .stat-foot { color: var(--text-muted); font-size: 12px; }
+
+      /* Section grid: recent retros + action items */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      .card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border);
+      }
+      .card-head h2 {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .card-head .link {
+        color: var(--primary-strong);
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .card-head .link:hover { text-decoration: underline; }
+
+      .retro-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto auto;
+        gap: 16px;
+        align-items: center;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.12s;
+      }
+      .retro-row:last-child { border-bottom: 0; }
+      .retro-row:hover { background: var(--surface-2); }
+
+      .retro-title {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 3px;
+      }
+      .retro-meta {
+        color: var(--text-muted);
+        font-size: 12.5px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        font-size: 11.5px;
+        font-weight: 600;
+        border-radius: 999px;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .chip.indigo { background: var(--primary-soft); color: var(--primary-strong); }
+      .chip.mint   { background: var(--mint-soft);    color: var(--mint); }
+      .chip.amber  { background: var(--amber-soft);   color: var(--amber); }
+      .chip.pink   { background: var(--pink-soft);    color: var(--pink); }
+      .chip.sky    { background: var(--sky-soft);     color: var(--sky); }
+
+      .avatars { display: inline-flex; }
+      .avatars .a {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid var(--surface);
+        margin-left: -8px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 10.5px;
+        font-weight: 700;
+      }
+      .avatars .a:first-child { margin-left: 0; }
+      .a.c1 { background: linear-gradient(135deg,#a78bfa,#6366f1); }
+      .a.c2 { background: linear-gradient(135deg,#5eead4,#10b981); }
+      .a.c3 { background: linear-gradient(135deg,#fda4af,#ec4899); }
+      .a.c4 { background: linear-gradient(135deg,#fcd34d,#f59e0b); }
+      .a.more {
+        background: var(--surface-2);
+        color: var(--text-soft);
+        border-color: var(--surface);
+      }
+
+      .row-arrow {
+        color: var(--text-muted);
+      }
+      .retro-row:hover .row-arrow { color: var(--primary-strong); }
+
+      /* Action items list */
+      .action-list { padding: 8px 12px 12px; }
+      .action-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 8px;
+        border-radius: 10px;
+        transition: background 0.12s;
+      }
+      .action-item:hover { background: var(--surface-2); }
+      .action-check {
+        appearance: none;
+        margin: 2px 0 0;
+        width: 18px;
+        height: 18px;
+        border: 1.6px solid var(--border-strong);
+        border-radius: 6px;
+        background: var(--surface);
+        flex-shrink: 0;
+        position: relative;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+      }
+      .action-check:checked {
+        background: var(--primary);
+        border-color: var(--primary);
+      }
+      .action-check:checked::after {
+        content: "";
+        position: absolute;
+        left: 5px;
+        top: 1px;
+        width: 5px;
+        height: 10px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .action-body { flex: 1; min-width: 0; }
+      .action-text {
+        font-size: 13.5px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+      .action-check:checked + .action-body .action-text {
+        text-decoration: line-through;
+        color: var(--text-muted);
+      }
+      .action-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .action-meta .pill {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-weight: 500;
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .stats { grid-template-columns: repeat(2, 1fr); }
+        .grid-2 { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 880px) {
+        .app { grid-template-columns: 1fr; }
+        .sidebar {
+          position: fixed;
+          left: 0; top: 0;
+          width: 84vw;
+          max-width: 320px;
+          z-index: 30;
+          transform: translateX(-100%);
+          transition: transform 0.25s ease;
+          box-shadow: var(--shadow-lg);
+        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(17,17,39,0.35);
+          z-index: 20;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s;
+        }
+        .sidebar-backdrop.open { opacity: 1; pointer-events: auto; }
+        .menu-btn { display: grid !important; }
+        .topbar { padding: 14px 18px; }
+        .content { padding: 22px 18px; }
+        .cta-grid { grid-template-columns: 1fr; }
+        .search kbd { display: none; }
+      }
+      @media (max-width: 520px) {
+        .stats { grid-template-columns: 1fr; }
+        .retro-row {
+          grid-template-columns: 1fr auto;
+          row-gap: 8px;
+        }
+        .retro-row .avatars,
+        .retro-row .chip { grid-column: 1 / -1; justify-self: start; }
+        .page-head h1 { font-size: 20px; }
+        .stat-value { font-size: 22px; }
+      }
+
+      .menu-btn { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" id="sidebar" aria-label="Birincil navigasyon">
+        <div class="brand">
+          <div class="brand-mark">R</div>
+          <div>
+            <div class="brand-name">Retro Tracker</div>
+            <div class="brand-sub">Workspace · Acme</div>
+          </div>
+        </div>
+
+        <div class="nav-section">Genel</div>
+        <a class="nav-item active" href="#">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>
+          Anasayfa
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg>
+          Retrolar
+          <span class="badge-count">12</span>
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Aksiyonlar
+          <span class="badge-count">5</span>
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Takım
+        </a>
+
+        <div class="nav-section">Hesap</div>
+        <a class="nav-item" href="#">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          Ayarlar
+        </a>
+        <a class="nav-item" href="#">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4"/><path d="M12 17h.01"/></svg>
+          Yardım
+        </a>
+
+        <div class="sidebar-foot">
+          <div class="avatar">DK</div>
+          <div class="who">
+            <div class="name">Doğukan</div>
+            <div class="role">Scrum Master</div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="sidebar-backdrop" id="backdrop"></div>
+
+      <div class="main">
+        <header class="topbar">
+          <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menüyü aç">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+          <label class="search" aria-label="Ara">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="search" placeholder="Retro, aksiyon veya kişi ara..." />
+            <kbd>⌘K</kbd>
+          </label>
+          <div style="flex:1"></div>
+          <button class="icon-btn" aria-label="Bildirimler">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="ping"></span>
+          </button>
+          <button class="btn btn-primary" id="btnNewTop">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Yeni Retro
+          </button>
+        </header>
+
+        <main class="content">
+          <section class="page-head">
+            <div>
+              <h1>Hoş geldin, Doğukan</h1>
+              <p>Retronu başlat, fikirleri topla, aksiyonları unutma.</p>
+            </div>
+            <div class="page-head-actions">
+              <button class="btn btn-ghost">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Bu Sprint
+              </button>
+              <button class="btn btn-soft">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                Dışa Aktar
+              </button>
+            </div>
+          </section>
+
+          <section class="cta-grid" aria-label="Hızlı eylemler">
+            <a class="cta" href="#new-retro" id="ctaNew">
+              <div class="cta-icon indigo" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+              <div class="cta-body">
+                <h3>Yeni Retro Oluştur</h3>
+                <p>Sprint sonu retrospektifini başlat, takımı davet et.</p>
+              </div>
+              <div class="cta-arrow" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </div>
+            </a>
+
+            <a class="cta" href="#old-retros" id="ctaOld">
+              <div class="cta-icon mint" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M9 18h6"/></svg>
+              </div>
+              <div class="cta-body">
+                <h3>Eski Retroları Gör</h3>
+                <p>Geçmiş retrolarını incele, aksiyonları takip et.</p>
+              </div>
+              <div class="cta-arrow" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </div>
+            </a>
+          </section>
+
+          <section class="stats" aria-label="Özet metrikler">
+            <div class="stat">
+              <div class="stat-head">
+                Toplam Retro
+                <div class="stat-ico indigo" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg>
+                </div>
+              </div>
+              <div class="stat-value">24</div>
+              <div class="stat-foot">
+                <span class="stat-delta">▲ %12</span> önceki aya göre
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-head">
+                Açık Aksiyon
+                <div class="stat-ico amber" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+                </div>
+              </div>
+              <div class="stat-value">8</div>
+              <div class="stat-foot">
+                <span class="stat-delta neg">▼ 2</span> bu hafta
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-head">
+                Tamamlanan
+                <div class="stat-ico mint" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                </div>
+              </div>
+              <div class="stat-value">142</div>
+              <div class="stat-foot">
+                <span class="stat-delta">▲ %8</span> tüm zamanlar
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-head">
+                Takım Üyesi
+                <div class="stat-ico sky" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                </div>
+              </div>
+              <div class="stat-value">9</div>
+              <div class="stat-foot">3 aktif şimdi</div>
+            </div>
+          </section>
+
+          <section class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h2>Son Retrolar</h2>
+                <a class="link" href="#">Tümünü gör →</a>
+              </div>
+
+              <a class="retro-row" href="#">
+                <div>
+                  <div class="retro-title">Sprint 24 · Mobil Ekip</div>
+                  <div class="retro-meta">8 katılımcı · 22 fikir · 4 aksiyon</div>
+                </div>
+                <div class="avatars" aria-label="Katılımcılar">
+                  <span class="a c1">DK</span>
+                  <span class="a c2">AS</span>
+                  <span class="a c3">EM</span>
+                  <span class="a c4">+5</span>
+                </div>
+                <span class="chip mint">Tamamlandı</span>
+                <span class="row-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+
+              <a class="retro-row" href="#">
+                <div>
+                  <div class="retro-title">Q2 · Onboarding Yolculuğu</div>
+                  <div class="retro-meta">6 katılımcı · 14 fikir · 2 aksiyon</div>
+                </div>
+                <div class="avatars">
+                  <span class="a c2">AS</span>
+                  <span class="a c3">EM</span>
+                  <span class="a c1">DK</span>
+                </div>
+                <span class="chip amber">Devam ediyor</span>
+                <span class="row-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+
+              <a class="retro-row" href="#">
+                <div>
+                  <div class="retro-title">Sprint 23 · Backend</div>
+                  <div class="retro-meta">5 katılımcı · 18 fikir · 6 aksiyon</div>
+                </div>
+                <div class="avatars">
+                  <span class="a c4">MY</span>
+                  <span class="a c1">DK</span>
+                  <span class="a c2">+3</span>
+                </div>
+                <span class="chip mint">Tamamlandı</span>
+                <span class="row-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+
+              <a class="retro-row" href="#">
+                <div>
+                  <div class="retro-title">Release Postmortem · v2.4</div>
+                  <div class="retro-meta">12 katılımcı · 31 fikir · 9 aksiyon</div>
+                </div>
+                <div class="avatars">
+                  <span class="a c3">EM</span>
+                  <span class="a c4">MY</span>
+                  <span class="a c1">+9</span>
+                </div>
+                <span class="chip pink">Yüksek öncelik</span>
+                <span class="row-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+
+              <a class="retro-row" href="#">
+                <div>
+                  <div class="retro-title">Sprint 22 · Design Ops</div>
+                  <div class="retro-meta">4 katılımcı · 9 fikir · 1 aksiyon</div>
+                </div>
+                <div class="avatars">
+                  <span class="a c2">AS</span>
+                  <span class="a c3">EM</span>
+                </div>
+                <span class="chip sky">Arşivlendi</span>
+                <span class="row-arrow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+            </div>
+
+            <div class="card">
+              <div class="card-head">
+                <h2>Açık Aksiyonlar</h2>
+                <a class="link" href="#">Hepsi →</a>
+              </div>
+              <div class="action-list">
+                <label class="action-item">
+                  <input type="checkbox" class="action-check" />
+                  <div class="action-body">
+                    <div class="action-text">Code review SLA'sını 24 saate düşür</div>
+                    <div class="action-meta">
+                      <span class="pill">Sprint 24</span>
+                      <span>👤 Doğukan</span>
+                      <span>📅 12 May</span>
+                    </div>
+                  </div>
+                </label>
+
+                <label class="action-item">
+                  <input type="checkbox" class="action-check" checked />
+                  <div class="action-body">
+                    <div class="action-text">Daily kickoff için Loom şablonu oluştur</div>
+                    <div class="action-meta">
+                      <span class="pill">Mobil</span>
+                      <span>👤 Aslı</span>
+                    </div>
+                  </div>
+                </label>
+
+                <label class="action-item">
+                  <input type="checkbox" class="action-check" />
+                  <div class="action-body">
+                    <div class="action-text">QA ortamında flaky testleri etiketle</div>
+                    <div class="action-meta">
+                      <span class="pill">Backend</span>
+                      <span>👤 Mert</span>
+                      <span>📅 18 May</span>
+                    </div>
+                  </div>
+                </label>
+
+                <label class="action-item">
+                  <input type="checkbox" class="action-check" />
+                  <div class="action-body">
+                    <div class="action-text">Onboarding checklist'i ürün ekibiyle review et</div>
+                    <div class="action-meta">
+                      <span class="pill">Onboarding</span>
+                      <span>👤 Ece</span>
+                    </div>
+                  </div>
+                </label>
+
+                <label class="action-item">
+                  <input type="checkbox" class="action-check" />
+                  <div class="action-body">
+                    <div class="action-text">Hotfix süreci için runbook taslağı yaz</div>
+                    <div class="action-meta">
+                      <span class="pill">Release</span>
+                      <span>👤 Doğukan</span>
+                      <span>📅 20 May</span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const sidebar = document.getElementById("sidebar");
+      const backdrop = document.getElementById("backdrop");
+      const menuBtn = document.getElementById("menuBtn");
+
+      function toggleSidebar(force) {
+        const open = force ?? !sidebar.classList.contains("open");
+        sidebar.classList.toggle("open", open);
+        backdrop.classList.toggle("open", open);
+      }
+      menuBtn?.addEventListener("click", () => toggleSidebar());
+      backdrop?.addEventListener("click", () => toggleSidebar(false));
+
+      document.getElementById("ctaNew")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("[demo] Yeni Retro Oluştur");
+      });
+      document.getElementById("ctaOld")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("[demo] Eski Retroları Gör");
+      });
+      document.getElementById("btnNewTop")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("[demo] Yeni Retro (topbar)");
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          document.querySelector(".search input")?.focus();
+        }
+      });
+    </script>
+  </body>
+</html>
