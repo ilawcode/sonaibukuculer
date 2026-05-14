@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lean Retro</title>
+  <meta name="description" content="Retronu başlat, fikirleri topla, aksiyonları unutma." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =====================================================================
+       Retro & Action Tracker — Minimal SaaS Landing
+       Mevcut projenin soft palet değişkenleri (globals.css ile uyumlu)
+       Tek dosyalı: HTML + CSS + minimal vanilla JS
+       ===================================================================== */
+
+    :root {
+      /* Mevcut projenin soft renkleri — globals.css ile birebir aynı */
+      --soft-blue: #b8d4f0;
+      --soft-blue-light: #daeaf8;
+      --soft-blue-dark: #7aafd4;
+
+      --soft-lila: #c9b8e8;
+      --soft-lila-light: #e8dff5;
+      --soft-lila-dark: #a48cc8;
+
+      --soft-mint: #b8e8d4;
+      --soft-mint-light: #daf5ec;
+      --soft-mint-dark: #7acca8;
+
+      --soft-peach: #f0d4b8;
+      --soft-peach-light: #f8eada;
+      --soft-peach-dark: #d4a87a;
+
+      --soft-pink: #f0b8d4;
+      --soft-pink-light: #f8daea;
+      --soft-pink-dark: #d47aaa;
+
+      --bg-main: #f4f6fb;
+      --bg-card: #ffffff;
+      --text-main: #3a3a5c;
+      --text-muted: #7a7a9a;
+      --text-soft: #5a5a8a;
+      --border-color: #e0e4f0;
+
+      --shadow-sm: 0 2px 8px rgba(120, 140, 200, 0.08);
+      --shadow-md: 0 4px 16px rgba(120, 140, 200, 0.12);
+      --shadow-lg: 0 12px 32px rgba(120, 140, 200, 0.18);
+
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text-main);
+      background: var(--bg-main);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    /* ===== Background blobs (soft, decorative) =========================== */
+    .bg-blobs {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+    }
+    .bg-blob.b1 {
+      width: 520px; height: 520px;
+      background: var(--soft-blue);
+      top: -160px; left: -160px;
+    }
+    .bg-blob.b2 {
+      width: 460px; height: 460px;
+      background: var(--soft-lila);
+      top: 30%; right: -180px;
+    }
+    .bg-blob.b3 {
+      width: 380px; height: 380px;
+      background: var(--soft-pink);
+      bottom: -160px; left: 30%;
+      opacity: 0.4;
+    }
+    .bg-blob.b4 {
+      width: 320px; height: 320px;
+      background: var(--soft-mint);
+      top: 8%; right: 22%;
+      opacity: 0.35;
+    }
+
+    /* ===== Layout ======================================================== */
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ===== Hero ========================================================== */
+    .hero {
+      padding: 96px 0 80px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--soft-blue-dark);
+      background: var(--soft-blue-light);
+      border: 1px solid rgba(122, 175, 212, 0.35);
+      border-radius: 999px;
+      margin-bottom: 20px;
+      letter-spacing: 0.2px;
+    }
+    .pill-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--soft-blue-dark);
+      box-shadow: 0 0 0 3px rgba(122, 175, 212, 0.25);
+    }
+
+    .hero-title {
+      font-size: clamp(34px, 5.4vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -1.2px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      max-width: 880px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-title .accent {
+      background: linear-gradient(120deg, var(--soft-blue-dark), var(--soft-lila-dark) 60%, var(--soft-pink-dark));
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+    }
+    .hero-title .amp {
+      color: var(--soft-peach-dark);
+      font-weight: 700;
+      margin: 0 4px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(15px, 1.4vw, 18px);
+      color: var(--text-muted);
+      max-width: 580px;
+      margin: 0 auto 36px auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+      white-space: nowrap;
+    }
+    .btn .arrow {
+      display: inline-block;
+      transition: transform .2s ease;
+    }
+    .btn:hover .arrow { transform: translateX(3px); }
+
+    .btn-primary {
+      background: var(--soft-blue-dark);
+      color: #fff;
+      border-color: var(--soft-blue-dark);
+      box-shadow: 0 6px 18px rgba(122, 175, 212, 0.45);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(122, 175, 212, 0.55);
+      background: #6aa0c8;
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      border-color: var(--soft-lila-dark);
+      color: var(--soft-lila-dark);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .hero-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-meta-item .check {
+      color: var(--soft-mint-dark);
+      font-weight: 800;
+    }
+
+    /* ===== Footer ======================================================== */
+    .foot {
+      padding: 36px 0 28px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .foot strong { color: var(--text-soft); font-weight: 600; }
+
+    /* ===== Responsive ==================================================== */
+    @media (max-width: 560px) {
+      .container { padding: 0 18px; }
+      .hero { padding: 56px 0 56px 0; }
+      .hero-title { letter-spacing: -0.6px; }
+      .btn { width: 100%; justify-content: center; }
+      .hero-actions { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="bg-blob b1"></span>
+    <span class="bg-blob b2"></span>
+    <span class="bg-blob b3"></span>
+    <span class="bg-blob b4"></span>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <span class="pill">
+          <span class="pill-dot" aria-hidden="true"></span>
+          Sprint sonlarını anlamlı geri bildirimlere dönüştürün
+        </span>
+
+        <h1 class="hero-title">
+          <span>Lean</span>
+          <span class="accent">Retro</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Retronu başlat, fikirleri topla, aksiyonları unutma.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#new-retro" class="btn btn-primary" data-action="new-retro">
+            Yeni Retro Oluştur
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+          <a href="#old-retros" class="btn btn-secondary" data-action="old-retros">
+            Eski Retroları Gör
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div class="hero-meta">
+          <span class="hero-meta-item"><span class="check">✓</span> Hesap gerekmez</span>
+          <span class="hero-meta-item"><span class="check">✓</span> Saniyeler içinde başlar</span>
+          <span class="hero-meta-item"><span class="check">✓</span> Takım dostu</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <div class="container">
+      <strong>Retro &amp; Action Tracker</strong> · © 2026 — Demo amaçlı statik sayfa.
+    </div>
+  </footer>
+
+  <script>
+    // Minimal vanilla JS: butonlara hafif "press" feedback'i
+    (function () {
+      var buttons = document.querySelectorAll(".btn, .nav-cta");
+      buttons.forEach(function (btn) {
+        btn.addEventListener("mousedown", function () {
+          btn.style.transform = "translateY(0) scale(0.98)";
+        });
+        btn.addEventListener("mouseup",   function () { btn.style.transform = ""; });
+        btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+      });
+    })();
+  </script>
+</body>
+</html>
