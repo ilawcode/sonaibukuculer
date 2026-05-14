@@ -263,3 +263,326 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--soft-blue-dark);
 }
+
+/* ═══════════════════════════════════════════
+   LEAN RETRO — Landing Dashboard
+═══════════════════════════════════════════ */
+
+.lean-landing {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Brand Bar */
+.lean-brand-bar {
+  text-align: center;
+  padding: 32px 16px 20px;
+}
+
+.lean-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.lean-logo-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--soft-blue), var(--soft-lila));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: var(--text-main);
+  box-shadow: 0 4px 14px rgba(120, 140, 200, 0.25);
+}
+
+.lean-logo-title {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.lean-logo-sub {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.lean-tagline {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Main Layout */
+.lean-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+  padding: 8px 0 40px;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Hero Side */
+.lean-hero {
+  padding: 8px 0;
+}
+
+.lean-hero-inner {
+  background: linear-gradient(145deg, var(--soft-blue-light) 0%, var(--soft-lila-light) 100%);
+  border-radius: 24px;
+  padding: 36px 32px;
+  border: 1px solid var(--border-color);
+}
+
+.lean-hero-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.lean-hero-accent {
+  background: linear-gradient(135deg, var(--soft-blue-dark), var(--soft-lila-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.lean-hero-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+/* Stats */
+.lean-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lean-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+}
+
+.lean-stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.lean-stat-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.lean-stat-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Panel Area */
+.lean-panel-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Selector */
+.lean-selector {
+  background: var(--bg-card);
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(120, 140, 200, 0.1);
+}
+
+.lean-selector-header {
+  padding: 18px 20px 14px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(135deg, var(--soft-blue-light), var(--soft-lila-light));
+}
+
+.lean-action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  text-align: left;
+}
+
+.lean-action-btn:last-child {
+  border-bottom: none;
+}
+
+.lean-action-btn:hover {
+  background: var(--bg-main);
+}
+
+.lean-action-btn-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.lean-action-join .lean-action-btn-icon {
+  background: var(--soft-blue-light);
+  color: var(--soft-blue-dark);
+}
+
+.lean-action-create .lean-action-btn-icon {
+  background: var(--soft-lila-light);
+  color: var(--soft-lila-dark);
+}
+
+.lean-action-btn-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lean-action-btn-text strong {
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.lean-action-btn-text span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.lean-action-btn-arrow {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Form Card */
+.lean-form-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(120, 140, 200, 0.1);
+}
+
+.lean-back-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.lean-back-btn:hover {
+  color: var(--text-main);
+}
+
+.lean-form-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.lean-form-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.lean-input-icon {
+  background: var(--soft-blue-light);
+  border-color: var(--border-color);
+  color: var(--soft-blue-dark);
+}
+
+.lean-key-input {
+  font-family: "Courier New", monospace;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Hint */
+.lean-hint {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lean-main {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 8px 0 32px;
+  }
+
+  .lean-hero-title {
+    font-size: 1.7rem;
+  }
+
+  .lean-hero-inner {
+    padding: 24px 20px;
+  }
+
+  .lean-brand-bar {
+    padding: 20px 16px 12px;
+  }
+}

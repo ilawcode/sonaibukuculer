@@ -68,7 +68,7 @@ export default function RetroBoard({ session, initialCards }: RetroBoardProps) {
   return (
     <div>
       {/* Session Header */}
-      <div className="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
+      <div className="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
         <div>
           <h2 className="fw-bold mb-1" style={{ color: "var(--text-main)" }}>
             {session.title}
@@ -78,6 +78,12 @@ export default function RetroBoard({ session, initialCards }: RetroBoardProps) {
               <span className="text-muted small">
                 <i className="bi bi-people me-1"></i>
                 {session.teamName}
+              </span>
+            )}
+            {session.createdBy && (
+              <span className="text-muted small">
+                <i className="bi bi-person me-1"></i>
+                {session.createdBy}
               </span>
             )}
             <span
@@ -98,6 +104,36 @@ export default function RetroBoard({ session, initialCards }: RetroBoardProps) {
             <p className="text-muted small mt-1 mb-0">{session.description}</p>
           )}
         </div>
+
+        {/* Retro Key Badge */}
+        {session.retroKey && (
+          <div
+            className="d-flex align-items-center gap-2 px-3 py-2 rounded-3"
+            style={{
+              background: "var(--soft-blue-light)",
+              border: "1px solid var(--soft-blue)",
+              cursor: "pointer",
+            }}
+            title="Arkadaşlarınızla paylaşın"
+            onClick={() => {
+              navigator.clipboard?.writeText(session.retroKey);
+            }}
+          >
+            <i className="bi bi-key" style={{ color: "var(--soft-blue-dark)" }}></i>
+            <span
+              style={{
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: 2,
+                fontSize: "0.9rem",
+                color: "var(--text-main)",
+              }}
+            >
+              {session.retroKey}
+            </span>
+            <i className="bi bi-clipboard" style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}></i>
+          </div>
+        )}
       </div>
 
       {/* Board Columns */}

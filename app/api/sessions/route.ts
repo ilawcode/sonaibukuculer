@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
-    const { title, description, teamName } = body;
+    const { title, description, teamName, createdBy } = body;
 
     if (!title) {
       return NextResponse.json(
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const session = await Session.create({ title, description, teamName });
+    const session = await Session.create({ title, description, teamName, createdBy });
     return NextResponse.json({ success: true, data: session }, { status: 201 });
   } catch (error) {
     console.error("POST /api/sessions error:", error);
