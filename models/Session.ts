@@ -1,12 +1,14 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+export type SessionStatus = "waiting" | "active" | "voting" | "closed";
+
 export interface ISession extends Document {
   title: string;
   description?: string;
   teamName?: string;
   createdBy?: string;
   retroKey: string;
-  status: "active" | "closed";
+  status: SessionStatus;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,7 +35,11 @@ const SessionSchema = new Schema<ISession>(
       uppercase: true,
       trim: true,
     },
-    status: { type: String, enum: ["active", "closed"], default: "active" },
+    status: {
+      type: String,
+      enum: ["waiting", "active", "voting", "closed"],
+      default: "waiting",
+    },
   },
   { timestamps: true }
 );

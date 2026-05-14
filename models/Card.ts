@@ -1,12 +1,16 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
-export type CardCategory = "went_well" | "to_improve" | "action_item" | "kudos";
+// positive → iyi giden
+// negative → kötü giden / geliştirilecek
+// kudos    → tebrik
+export type CardType = "positive" | "negative" | "kudos";
 
 export interface ICard extends Document {
   sessionId: mongoose.Types.ObjectId;
-  category: CardCategory;
+  type: CardType;
   content: string;
-  author?: string;
+  // Anonim giriş: author kaydedilmez, sadece participantId opsiyonel
+  participantId?: mongoose.Types.ObjectId;
   votes: number;
   createdAt: Date;
   updatedAt: Date;
@@ -19,13 +23,18 @@ const CardSchema = new Schema<ICard>(
       ref: "Session",
       required: true,
     },
-    category: {
+    type: {
       type: String,
-      enum: ["went_well", "to_improve", "action_item", "kudos"],
+      enum: ["positive", "negative", "kudos"],
       required: true,
     },
     content: { type: String, required: true, trim: true },
-    author: { type: String, trim: true },
+    // Anonim: author alanı yok, participantId opsiyonel
+    participantId: {
+      type: Schema.Types.ObjectId,
+      ref: "Participant",
+      default: null,
+    },
     votes: { type: Number, default: 0 },
   },
   { timestamps: true }
