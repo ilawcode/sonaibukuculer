@@ -41,6 +41,12 @@ export default function Navbar() {
                 Yeni Oturum
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/retros">
+                <i className="bi bi-clock-history me-1"></i>
+                Eski Retrolar
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

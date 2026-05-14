@@ -27,6 +27,66 @@ export interface ApiResponse<T> {
   error?: string;
 }
 
+export type RetroStatus = "completed" | "in_progress" | "needs_action";
+
+export type RetroActionPriority = "low" | "medium" | "high";
+
+export type RetroActionStatus = "open" | "planned" | "in_progress" | "completed";
+
+export interface RetroParticipant {
+  id: string;
+  name: string;
+  role: string;
+  email: string;
+  avatarInitials: string;
+  attendanceStatus: "attended" | "late" | "absent";
+}
+
+export interface RetroInsightItem {
+  id: string;
+  content: string;
+  votes?: number;
+  tag?: string;
+}
+
+export interface RetroActionReminder {
+  status: "not_sent" | "sent";
+  lastSentAt?: string;
+}
+
+export interface RetroActionItem {
+  id: string;
+  title: string;
+  description: string;
+  priority: RetroActionPriority;
+  status: RetroActionStatus;
+  dueDate: string;
+  createdAt: string;
+  assigneeId?: string;
+  assigneeName?: string;
+  assigneeEmail?: string;
+  reminder: RetroActionReminder;
+}
+
+export interface RetroSummary {
+  id: string;
+  key: string;
+  title: string;
+  teamName: string;
+  date: string;
+  participantCount: number;
+  actionCount: number;
+  status: RetroStatus;
+}
+
+export interface RetroDetail extends RetroSummary {
+  summary: string;
+  wentWell: RetroInsightItem[];
+  wentWrong: RetroInsightItem[];
+  participants: RetroParticipant[];
+  actions: RetroActionItem[];
+}
+
 export const CARD_CATEGORIES: Record<
   CardCategory,
   { label: string; color: string; icon: string }
