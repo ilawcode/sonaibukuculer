@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Card from "@/models/Card";
+import Session from "@/models/Session";
+
+const VALID_TYPES = ["positive", "negative", "kudos"];
 
 // GET /api/cards?sessionId=xxx&type=positive
 export async function GET(request: NextRequest) {
@@ -12,9 +15,17 @@ export async function GET(request: NextRequest) {
 
     const filter: Record<string, string> = {};
     if (sessionId) filter.sessionId = sessionId;
-    if (type) filter.type = type;
+    if (type) {
+      if (!VALID_TYPES.includes(type)) {
+        return NextResponse.json(
+          { success: false, error: `Geçersiz tip. Geçerli tipler: ${VALID_TYPES.join(", ")}` },
+          { status: 400 }
+        );
+      }
+      filter.type = type;
+    }
 
-    const cards = await Card.find(filter).sort({ createdAt: -1 });
+    const cards = await Card.find(filter).sort({ votes: -1, createdAt: -1 });
     return NextResponse.json({ success: true, data: cards });
   } catch (error) {
     console.error("GET /api/cards error:", error);
@@ -32,6 +43,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { sessionId, type, content, participantId } = body;
 
+    // Zorunlu alan kontrolü
     if (!sessionId || !type || !content) {
       return NextResponse.json(
         { success: false, error: "sessionId, type ve content zorunludur" },
@@ -39,11 +51,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Anonim: author kaydedilmez
+    // Type validasyonu
+    if (!VALID_TYPES.includes(type)) {
+      return NextResponse.json(
+        { success: false, error: `Geçersiz tip. Geçerli tipler: ${VALID_TYPES.join(", ")}` },
+        { status: 400 }
+      );
+    }
+
+    // Content uzunluk validasyonu
+    const trimmedContent = content.trim();
+    if (trimmedContent.length < 1 || trimmedContent.length > 500) {
+      return NextResponse.json(
+        { success: false, error: "İçerik 1-500 karakter arasında olmalıdır" },
+        { status: 400 }
+      );
+    }
+
+    // Session var mı ve aktif mi?
+    const session = await Session.findById(sessionId);
+    if (!session) {
+      return NextResponse.json(
+        { success: false, error: "Oturum bulunamadı" },
+        { status: 404 }
+      );
+    }
+    if (session.status === "closed") {
+      return NextResponse.json(
+        { success: false, error: "Kapalı oturumlara kart eklenemez" },
+        { status: 400 }
+      );
+    }
+
     const card = await Card.create({
       sessionId,
       type,
-      content,
+      content: trimmedContent,
       participantId: participantId || null,
     });
 
