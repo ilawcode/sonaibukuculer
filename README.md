@@ -30,6 +30,19 @@ npm run dev
 
 [http://localhost:3000](http://localhost:3000) adresinde açılır.
 
+## Frontend-only Retro Board (`/retro`)
+
+Demo amaçlı, **backend gerektirmeyen** modern retrospective board ekranı:
+
+- Ana sayfadaki **"Create Retro"** butonu ile açılır.
+- Sol panelde dummy nickname'ler ile katılımcı listesi (avatar + online durum).
+- Sağda iki kolonlu board: **İyi Gidenler** & **Kötü Gidenler**.
+- "+" ile editable sticky-note kart eklenir, hover ile silinebilir.
+- "Share Link" butonu otomatik oluşturulan **Retro Key**'e göre URL'i panoya kopyalar.
+- Tüm state in-memory; veritabanı, API veya auth bağlantısı yoktur.
+
+Ekrana doğrudan gitmek için: [http://localhost:3000/retro](http://localhost:3000/retro)
+
 ## Proje Yapısı
 
 ```

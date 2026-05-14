@@ -15,7 +15,11 @@ export default function HomePage() {
           İyi gidenleri, geliştirilecekleri ve aksiyonları bir arada takip edin.
         </p>
         <div className="d-flex gap-3 justify-content-center flex-wrap">
-          <Link href="/sessions/new" className="btn btn-soft-primary btn-lg px-4">
+          <Link href="/retro" className="btn btn-soft-primary btn-lg px-4">
+            <i className="bi bi-stars me-2"></i>
+            Create Retro
+          </Link>
+          <Link href="/sessions/new" className="btn btn-soft-secondary btn-lg px-4">
             <i className="bi bi-plus-circle me-2"></i>
             Yeni Oturum Başlat
           </Link>
