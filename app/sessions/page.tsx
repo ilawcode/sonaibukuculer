@@ -2,6 +2,7 @@ import Link from "next/link";
 import connectDB from "@/lib/mongodb";
 import Session from "@/models/Session";
 import { ISession } from "@/models/Session";
+import { SESSION_STATUSES } from "@/types";
 
 async function getSessions(): Promise<ISession[]> {
   await connectDB();
@@ -60,15 +61,18 @@ export default async function SessionsPage() {
                     <h5 className="fw-semibold mb-0" style={{ color: "var(--text-main)" }}>
                       {session.title}
                     </h5>
-                    <span
-                      className={
-                        session.status === "active"
-                          ? "status-badge-active"
-                          : "status-badge-closed"
-                      }
-                    >
-                      {session.status === "active" ? "Aktif" : "Kapalı"}
-                    </span>
+                    {(() => {
+                      const info = SESSION_STATUSES[session.status] ?? { label: session.status, icon: "bi-circle" };
+                      return (
+                        <span
+                          className="badge rounded-pill"
+                          style={{ background: info.color ?? "#e8e8f0", color: "var(--text-main)", fontSize: "0.7rem" }}
+                        >
+                          <i className={`bi ${info.icon} me-1`}></i>
+                          {info.label}
+                        </span>
+                      );
+                    })()}
                   </div>
 
                   {session.teamName && (

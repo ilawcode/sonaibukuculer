@@ -3,10 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+interface CreatedSession {
+  _id: string;
+  retroKey: string;
+  title: string;
+}
+
 export default function NewSessionPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [created, setCreated] = useState<CreatedSession | null>(null);
+  const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({
     title: "",
     teamName: "",
@@ -32,13 +40,86 @@ export default function NewSessionPage() {
         return;
       }
 
-      router.push(`/sessions/${data.data._id}`);
+      setCreated({ _id: data.data._id, retroKey: data.data.retroKey, title: data.data.title });
     } catch {
       setError("Sunucuya bağlanılamadı");
     } finally {
       setLoading(false);
     }
   };
+
+  const handleCopy = () => {
+    if (created?.retroKey) {
+      navigator.clipboard?.writeText(created.retroKey);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  if (created) {
+    return (
+      <div className="row justify-content-center">
+        <div className="col-md-8 col-lg-6">
+          <div className="retro-card p-4 p-md-5 text-center">
+            <div
+              className="rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style={{ width: 72, height: 72, background: "var(--soft-lila-light)" }}
+            >
+              <i className="bi bi-check-lg fs-2" style={{ color: "var(--soft-lila-dark)" }}></i>
+            </div>
+            <h3 className="fw-bold mb-1" style={{ color: "var(--text-main)" }}>
+              Retro Oluşturuldu!
+            </h3>
+            <p className="text-muted mb-4">{created.title}</p>
+
+            <p className="text-muted small mb-2 fw-semibold">KATILIM KODU</p>
+            <div
+              className="d-inline-flex align-items-center gap-3 px-4 py-3 rounded-3 mb-4"
+              style={{
+                background: "var(--soft-blue-light)",
+                border: "2px solid var(--soft-blue)",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "monospace",
+                  fontWeight: 800,
+                  fontSize: "2rem",
+                  letterSpacing: 6,
+                  color: "var(--text-main)",
+                }}
+              >
+                {created.retroKey}
+              </span>
+              <button
+                className="btn btn-sm"
+                onClick={handleCopy}
+                style={{ border: "none", background: "transparent" }}
+                title="Kopyala"
+              >
+                <i
+                  className={`bi ${copied ? "bi-clipboard-check text-success" : "bi-clipboard"}`}
+                  style={{ fontSize: "1.2rem" }}
+                ></i>
+              </button>
+            </div>
+
+            <p className="text-muted small mb-4">
+              Bu kodu katılımcılarla paylaşın. Onlar ana sayfadaki "Retro&apos;ya Katıl" bölümünden bu kodla oturuma katılabilir.
+            </p>
+
+            <button
+              className="btn btn-soft-primary w-100"
+              onClick={() => router.push(`/sessions/${created._id}`)}
+            >
+              <i className="bi bi-play-circle me-2"></i>
+              Retro Board&apos;a Git
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="row justify-content-center">

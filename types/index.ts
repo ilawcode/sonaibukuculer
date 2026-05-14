@@ -1,11 +1,19 @@
 // ─── Session ────────────────────────────────────────────
-export type SessionStatus = "waiting" | "active" | "voting" | "closed";
+export type SessionStatus =
+  | "created"
+  | "waiting_participants"
+  | "in_progress"
+  | "review"
+  | "action_planning"
+  | "closed";
 
 export const SESSION_STATUSES: Record<SessionStatus, { label: string; color: string; icon: string }> = {
-  waiting:  { label: "Bekliyor",   color: "#e8dff5", icon: "bi-hourglass"         },
-  active:   { label: "Aktif",      color: "#daf5ec", icon: "bi-play-circle"        },
-  voting:   { label: "Oylama",     color: "#daeaf8", icon: "bi-hand-index-thumb"   },
-  closed:   { label: "Kapalı",     color: "#e8e8f0", icon: "bi-lock"               },
+  created:              { label: "Oluşturuldu",         color: "#f0e8fd", icon: "bi-plus-circle"         },
+  waiting_participants: { label: "Katılımcı Bekleniyor", color: "#fff3cd", icon: "bi-hourglass"           },
+  in_progress:          { label: "Devam Ediyor",         color: "#daf5ec", icon: "bi-play-circle"         },
+  review:               { label: "İnceleme",             color: "#daeaf8", icon: "bi-eye"                 },
+  action_planning:      { label: "Aksiyon Planlama",     color: "#fde8d8", icon: "bi-list-task"           },
+  closed:               { label: "Kapalı",               color: "#e8e8f0", icon: "bi-lock"               },
 };
 
 export interface Session {

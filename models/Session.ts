@@ -1,6 +1,21 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
-export type SessionStatus = "waiting" | "active" | "voting" | "closed";
+export type SessionStatus =
+  | "created"
+  | "waiting_participants"
+  | "in_progress"
+  | "review"
+  | "action_planning"
+  | "closed";
+
+export const STATUS_TRANSITIONS: Record<SessionStatus, SessionStatus | null> = {
+  created: "waiting_participants",
+  waiting_participants: "in_progress",
+  in_progress: "review",
+  review: "action_planning",
+  action_planning: "closed",
+  closed: null,
+};
 
 export interface ISession extends Document {
   title: string;
@@ -37,8 +52,8 @@ const SessionSchema = new Schema<ISession>(
     },
     status: {
       type: String,
-      enum: ["waiting", "active", "voting", "closed"],
-      default: "waiting",
+      enum: ["created", "waiting_participants", "in_progress", "review", "action_planning", "closed"],
+      default: "created",
     },
   },
   { timestamps: true }
