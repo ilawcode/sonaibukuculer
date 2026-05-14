@@ -44,7 +44,7 @@ export async function PATCH(
         {
           success: false,
           error:
-            "Status değişikliği için /start, /start-voting veya /close endpoint'lerini kullanın.",
+            "Status değişikliği için /advance endpoint'ini kullanın.",
         },
         { status: 400 }
       );

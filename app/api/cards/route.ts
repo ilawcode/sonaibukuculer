@@ -83,6 +83,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (session.status !== "in_progress") {
+      return NextResponse.json(
+        { success: false, error: "Kart sadece 'Devam Ediyor' aşamasında eklenebilir" },
+        { status: 400 }
+      );
+    }
+
     const card = await Card.create({
       sessionId,
       type,

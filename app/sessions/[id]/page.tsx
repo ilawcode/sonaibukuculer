@@ -17,21 +17,17 @@ async function getSessionData(id: string) {
   if (!session) return null;
 
   const cards = await Card.find({ sessionId: id })
-    .sort({ createdAt: -1 })
+    .sort({ votes: -1, createdAt: -1 })
     .lean();
 
   return {
     session: JSON.parse(JSON.stringify(session)) as ISession,
-    cards: JSON.parse(JSON.stringify(cards)) as ICard[],
+    cards:   JSON.parse(JSON.stringify(cards))   as ICard[],
   };
 }
 
 export default async function SessionDetailPage({ params }: PageProps) {
   const data = await getSessionData(params.id);
-
-  if (!data) {
-    notFound();
-  }
-
+  if (!data) notFound();
   return <RetroBoard session={data.session} initialCards={data.cards} />;
 }

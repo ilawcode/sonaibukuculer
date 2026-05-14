@@ -6,7 +6,6 @@ import { sendActionMail } from "@/lib/mailer";
 
 // POST /api/actions/send-bulk-mail
 // Body: { sessionId, actionIds?: string[] }
-// actionIds yoksa sessionId'ye ait tüm açık (open/in_progress) ve email'i olan aksiyonlar gönderilir
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
@@ -29,15 +28,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Gönderilecek aksiyonları belirle
-    const filter: Record<string, unknown> = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filter: Record<string, any> = {
       sessionId,
-      assigneeEmail: { $exists: true, $ne: null, $ne: "" },
+      assigneeEmail: { $exists: true, $nin: [null, ""] },
     };
 
     if (actionIds && Array.isArray(actionIds) && actionIds.length > 0) {
       filter._id = { $in: actionIds };
     } else {
-      // Sadece açık ve devam eden aksiyonları gönder
       filter.status = { $in: ["open", "in_progress"] };
     }
 
@@ -50,9 +49,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const results: { actionId: string; email: string; status: "sent" | "failed"; error?: string }[] = [];
+    const results: {
+      actionId: string;
+      email: string;
+      status: "sent" | "failed";
+      error?: string;
+    }[] = [];
 
-    // Her aksiyonu sırayla gönder
     for (const action of actions) {
       try {
         await sendActionMail({
@@ -82,7 +85,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const sentCount = results.filter((r) => r.status === "sent").length;
+    const sentCount   = results.filter((r) => r.status === "sent").length;
     const failedCount = results.filter((r) => r.status === "failed").length;
 
     return NextResponse.json({
